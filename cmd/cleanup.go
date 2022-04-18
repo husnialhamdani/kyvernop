@@ -9,6 +9,7 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/husnialhamdani/kyvernop/objects"
 	"github.com/spf13/cobra"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -21,11 +22,13 @@ var cleanupCmd = &cobra.Command{
 	Long:  `Cleanup all resources created`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("cleanup called")
-		cleanup(10, "default")
+		size, _ := cmd.Flags().GetInt("size")
+		cleanup(size, "default")
 	},
 }
 
 func init() {
+	cleanupCmd.Flags().IntP("size", "s", 0, "number of resources to cleanup")
 	rootCmd.AddCommand(cleanupCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -50,11 +53,11 @@ func cleanup(size int, namespace string) {
 	log.Print("Cleaning up resources...")
 	for i := size - 1; i >= 0; i-- {
 		counter := strconv.Itoa(i)
-		objects.deleteNamespace(clientset, counter)
-		objects.deleteDeployment(clientset, counter, namespace)
-		objects.deleteConfigmap(clientset, counter, namespace)
-		objects.deletePod(clientset, counter, namespace)
-		objects.deleteSecret(clientset, counter, namespace)
-		objects.deleteCronjob(clientset, counter, namespace)
+		objects.DeleteNamespace(*clientset, counter)
+		objects.DeleteDeployment(*clientset, counter, namespace)
+		objects.DeleteConfigmap(*clientset, counter, namespace)
+		objects.DeletePod(*clientset, counter, namespace)
+		objects.DeleteSecret(*clientset, counter, namespace)
+		objects.DeleteCronjob(*clientset, counter, namespace)
 	}
 }

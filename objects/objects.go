@@ -11,7 +11,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func createNamespace(clientset kubernetes.Clientset, name string) {
+func CreateNamespace(clientset kubernetes.Clientset, name string) {
 	nsSpec := &corev1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: "namespace-" + name,
@@ -25,7 +25,7 @@ func createNamespace(clientset kubernetes.Clientset, name string) {
 	fmt.Println("Namespace successfully created:", namespace.GetName())
 }
 
-func deleteNamespace(clientset kubernetes.Clientset, name string) {
+func DeleteNamespace(clientset kubernetes.Clientset, name string) {
 	deletePolicy := metav1.DeletePropagationForeground
 	if err := clientset.CoreV1().Namespaces().Delete(context.TODO(), "namespace-"+name, metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
@@ -52,7 +52,7 @@ func createConfigmap(clientset kubernetes.Clientset, name string, namespace stri
 	fmt.Println("ConfigMap created:", configMap.GetName())
 }
 
-func deleteConfigmap(clientset kubernetes.Clientset, name string, namespace string) {
+func DeleteConfigmap(clientset kubernetes.Clientset, name string, namespace string) {
 	deletePolicy := metav1.DeletePropagationForeground
 	if err := clientset.CoreV1().ConfigMaps(namespace).Delete(context.TODO(), "cm-"+name, metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
@@ -63,7 +63,7 @@ func deleteConfigmap(clientset kubernetes.Clientset, name string, namespace stri
 	fmt.Println("ConfigMap deleted:", "cm-"+name)
 }
 
-func createSecret(clientset kubernetes.Clientset, name string, namespace string) {
+func CreateSecret(clientset kubernetes.Clientset, name string, namespace string) {
 	secretSpec := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "secret-" + name,
@@ -80,7 +80,7 @@ func createSecret(clientset kubernetes.Clientset, name string, namespace string)
 	fmt.Println("Secret created", secret.GetName())
 }
 
-func deleteSecret(clientset kubernetes.Clientset, name string, namespace string) {
+func DeleteSecret(clientset kubernetes.Clientset, name string, namespace string) {
 	deletePolicy := metav1.DeletePropagationForeground
 	if err := clientset.CoreV1().Secrets(namespace).Delete(context.TODO(), "secret-"+name, metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
@@ -91,7 +91,7 @@ func deleteSecret(clientset kubernetes.Clientset, name string, namespace string)
 	fmt.Println("Secret deleted:", "secret-"+name)
 }
 
-func createPod(clientset kubernetes.Clientset, name string, namespace string, image string) {
+func CreatePod(clientset kubernetes.Clientset, name string, namespace string, image string) {
 	podSpec := &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "pod-" + name,
@@ -111,7 +111,7 @@ func createPod(clientset kubernetes.Clientset, name string, namespace string, im
 	fmt.Println("Pod created:", pod.GetName())
 }
 
-func deletePod(clientset kubernetes.Clientset, name string, namespace string) {
+func DeletePod(clientset kubernetes.Clientset, name string, namespace string) {
 	deletePolicy := metav1.DeletePropagationForeground
 	if err := clientset.CoreV1().Pods(namespace).Delete(context.TODO(), "pod-"+name, metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
@@ -122,7 +122,7 @@ func deletePod(clientset kubernetes.Clientset, name string, namespace string) {
 	fmt.Println("Pod deleted:", "pod-"+name)
 }
 
-func createCronjob(clientset kubernetes.Clientset, name string, namespace string, schedule string) {
+func CreateCronjob(clientset kubernetes.Clientset, name string, namespace string, schedule string) {
 	cronjobSpec := &batchv1.CronJob{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "cronjob-" + name,
@@ -152,7 +152,7 @@ func createCronjob(clientset kubernetes.Clientset, name string, namespace string
 	fmt.Println("Cronjob created :", cronjob.GetName())
 }
 
-func deleteCronjob(clientset kubernetes.Clientset, name string, namespace string) {
+func DeleteCronjob(clientset kubernetes.Clientset, name string, namespace string) {
 	deletePolicy := metav1.DeletePropagationForeground
 	if err := clientset.BatchV1().CronJobs(namespace).Delete(context.TODO(), "cronjob-"+name, metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
@@ -163,7 +163,7 @@ func deleteCronjob(clientset kubernetes.Clientset, name string, namespace string
 	fmt.Println("Cronjob deleted:", "cronjob-"+name)
 }
 
-func createDeployment(clientset kubernetes.Clientset, name string, namespace string, image string, label map[string]string) {
+func CreateDeployment(clientset kubernetes.Clientset, name string, namespace string, image string, label map[string]string) {
 	deploymentSpec := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "deployment-" + name,
@@ -205,7 +205,7 @@ func createDeployment(clientset kubernetes.Clientset, name string, namespace str
 	fmt.Println("deployment sucessfully created:", deployment.GetName())
 }
 
-func deleteDeployment(clientset kubernetes.Clientset, name string, namespace string) {
+func DeleteDeployment(clientset kubernetes.Clientset, name string, namespace string) {
 	deletePolicy := metav1.DeletePropagationForeground
 	if err := clientset.AppsV1().Deployments(namespace).Delete(context.TODO(), "deployment-"+name, metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
