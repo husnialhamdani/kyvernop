@@ -36,7 +36,7 @@ func DeleteNamespace(clientset kubernetes.Clientset, name string) {
 	fmt.Println("Namespace deleted:", "namespace-"+name)
 }
 
-func createConfigmap(clientset kubernetes.Clientset, name string, namespace string) {
+func CreateConfigmap(clientset kubernetes.Clientset, name string, namespace string) {
 	configmapSpec := &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "cm-" + name,

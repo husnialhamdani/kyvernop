@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 
@@ -21,7 +20,6 @@ var cleanupCmd = &cobra.Command{
 	Short: "Cleanup all resources created",
 	Long:  `Cleanup all resources created`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("cleanup called")
 		size, _ := cmd.Flags().GetInt("size")
 		cleanup(size, "default")
 	},
@@ -51,7 +49,7 @@ func cleanup(size int, namespace string) {
 	}
 	clientset := kubernetes.NewForConfigOrDie(config)
 	log.Print("Cleaning up resources...")
-	for i := size - 1; i >= 0; i-- {
+	for i := size; i >= 0; i-- {
 		counter := strconv.Itoa(i)
 		objects.DeleteNamespace(*clientset, counter)
 		objects.DeleteDeployment(*clientset, counter, namespace)
