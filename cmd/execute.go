@@ -43,13 +43,13 @@ var executeCmd = &cobra.Command{
 		clientset := kubernetes.NewForConfigOrDie(config)
 
 		scales, _ := cmd.Flags().GetString("scales")
-		quantityMap := map[string]int{"xs": 50, "small": 500, "medium": 1000, "large": 2000, "xl": 3000}
+		quantityMap := map[string]int{"xs": 100, "small": 500, "medium": 1000, "large": 2000, "xl": 3000}
 		size := quantityMap[scales] / 5
 
 		//Get usage
 		wg := new(sync.WaitGroup)
 		wg.Add(1)
-		go getMetrics(wg, *clientset, 10, 10, "kyverno")
+		go getMetrics(wg, *clientset, 30, 10, "kyverno")
 
 		//dependencies
 		label := map[string]string{"app": "web"}
@@ -64,7 +64,7 @@ var executeCmd = &cobra.Command{
 			objects.CreateSecret(*clientset, counter, namespace)
 		}
 
-		time.Sleep(time.Duration(3) * time.Minute)
+		time.Sleep(time.Duration(10) * time.Minute)
 
 		//Delete resources - steps down
 		fmt.Println("Deleting resource..")
