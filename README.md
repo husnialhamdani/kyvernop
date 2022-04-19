@@ -5,7 +5,7 @@ This project automates scalability tests for Kyverno on large Kubernetes cluster
 
 
 ## Test scenario
-The test scenarion will create loads of Kubernetes objects (Pod, Namespace, Deployment, Cronjob, ConfigMap, Secret) based on user defined scales
+This test scenario will create loads of Kubernetes objects (Pod, Namespace, Deployment, Cronjob, ConfigMap, Secret) based on user defined scales
 
 
 ## Getting Started
