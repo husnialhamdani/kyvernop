@@ -11,17 +11,20 @@ This project automates scalability tests for Kyverno on large Kubernetes cluster
 ## Getting Started
 
 ```
-  git clone https://github.com/husnialhamdani/kyvernop.git
-  cd kyvernop
-  go build .
+git clone https://github.com/husnialhamdani/kyvernop.git
+cd kyvernop
+go build .
 ```
   
 Start automation
-  ./kyvernop execute --scale medium
-  
+```
+./kyvernop execute --scale medium
+``` 
+
+```
 Cleanup
   ./kyvernop cleanup -size 500
-
+```
 
 ## Anomaly Detection
 
