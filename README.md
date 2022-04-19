@@ -21,8 +21,9 @@ Start automation
 ./kyvernop execute --scale medium
 ``` 
 
-```
+
 Cleanup
+```
   ./kyvernop cleanup -size 500
 ```
 
