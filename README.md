@@ -24,7 +24,7 @@ Start automation
 
 Cleanup
 ```
-  ./kyvernop cleanup -size 500
+./kyvernop cleanup -size 500
 ```
 
 ## Anomaly Detection
