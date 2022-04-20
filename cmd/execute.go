@@ -62,6 +62,7 @@ var executeCmd = &cobra.Command{
 		for i := 0; i < size; i++ {
 			counter := strconv.Itoa(i)
 			objects.CreateNamespace(*clientset, counter)
+			objects.CreateCronjob(*clientset, counter, namespace, "* * * * *")
 			objects.CreateDeployment(*clientset, counter, namespace, "nginx:latest", label)
 			objects.CreateConfigmap(*clientset, counter, namespace)
 			objects.CreatePod(*clientset, counter, namespace, "nginx")
