@@ -53,7 +53,7 @@ var executeCmd = &cobra.Command{
 		//Get usage
 		wg := new(sync.WaitGroup)
 		wg.Add(1)
-		go getMetrics(wg, *clientset, 30, 10, "kyverno")
+		go getMetrics(wg, *clientset, 8, 10, "kyverno")
 
 		//dependencies
 		label := map[string]string{"app": "web"}
