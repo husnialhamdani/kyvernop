@@ -33,7 +33,8 @@ jobs:
             ls
             git clone https://github.com/husnialhamdani/kyvernop.git dir
             bash ~/dir/setup.sh
-   
+        continue-on-error: true
+        
       - name: run automation
         timeout-minutes: 40
         uses: appleboy/ssh-action@master
