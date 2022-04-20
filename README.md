@@ -39,7 +39,7 @@ Cleanup
 
 Isolation Forest is an algorithm that detects anomalies by taking a subset of data and constructing many isolation trees out of it.
 
-The core idea is that the anomalies are much easier to isolate than the normal observations and the anomalies exist in much smaller depths of an isolation tree. An isolation tree is constructed by randomly selecting a feature and randomly selecting a value from that feature. A forest is constructed by aggregating all the isolation trees.
+An isolation tree is constructed by randomly selecting a feature and randomly selecting a value from that feature. A forest is constructed by aggregating all the isolation trees.
 
 We pass the the Kyverno usage as input data and this algorithm will provide a prediction, The isolation forest assigns 0 to the anomalous data and 1 to the normal data and finally it plot the anomalies predicted by Isolation forest.
 
