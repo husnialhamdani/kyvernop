@@ -12,6 +12,7 @@ on:
 jobs:
   setup-cluster:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
@@ -33,15 +34,6 @@ jobs:
             git clone https://github.com/husnialhamdani/kyvernop.git dir
             bash ~/dir/setup.sh
    
-    
-
-  automation:
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
       - name: run automation
         timeout-minutes: 40
         uses: appleboy/ssh-action@master
@@ -57,8 +49,8 @@ jobs:
             export EMAILTO=${{ secrets.EMAILTO }}
             printenv | grep EMAIL
             cd ~/dir
-            /usr/local/go/bin/go mod download
             pip install -r requirements.txt
+            /usr/local/go/bin/go mod download
             /usr/local/go/bin/go run main.go execute --scale xs
             rm -rf ~/dir
             
