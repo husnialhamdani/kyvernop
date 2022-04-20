@@ -1,0 +1,68 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  setup-cluster:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      - name: Run a multi-line script
+        run: |
+          ls
+          
+      - name: setup cluster
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          script: |
+            ls
+            bash ~/dir/setup.sh
+   
+    
+
+  automation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      - name: run automation
+        timeout-minutes: 40
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          script: |
+            export EMAILFROM=${{ secrets.EMAILFROM }}
+            export EMAILPASS=${{ secrets.EMAILPASS }}
+            export EMAILTO=${{ secrets.EMAILTO }}
+            printenv | grep EMAIL
+            git clone https://github.com/husnialhamdani/kyvernop.git dir
+            cd ~/dir
+            /usr/local/go/bin/go mod download
+            pip install -r requirements.txt
+            /usr/local/go/bin/go run main.go execute --scale xs
+            
+     # - name: storing report
+     #   uses: actions/upload-artifact@v3
+     #   with:
+     #     name: report
+     #     path: report.png
