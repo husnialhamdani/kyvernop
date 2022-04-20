@@ -74,10 +74,10 @@ var executeCmd = &cobra.Command{
 			https://github.com/cenkalti/backoff
 
 		*/
-		time.Sleep(time.Duration(10) * time.Minute)
+		time.Sleep(time.Duration(5) * time.Minute)
 
 		//another wait for Kyverno background reconcilation
-		time.Sleep(time.Duration(20) * time.Minute)
+		//time.Sleep(time.Duration(20) * time.Minute)
 
 		//Delete resources - steps down
 		fmt.Println("Deleting resource..")
