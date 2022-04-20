@@ -44,6 +44,10 @@ var executeCmd = &cobra.Command{
 
 		scales, _ := cmd.Flags().GetString("scale")
 		quantityMap := map[string]int{"xs": 100, "small": 500, "medium": 1000, "large": 2000, "xl": 3000}
+
+		// kyvernop execute --scale xs
+		// kyvernop execute --number 600
+
 		size := quantityMap[scales] / 5
 
 		//Get usage
@@ -64,7 +68,16 @@ var executeCmd = &cobra.Command{
 			objects.CreateSecret(*clientset, counter, namespace)
 		}
 
+		//to ensure the resources in ready state
+		/*
+			instead of using static duration, it can be improved using this library to check whether the resources in ready state or not
+			https://github.com/cenkalti/backoff
+
+		*/
 		time.Sleep(time.Duration(10) * time.Minute)
+
+		//another wait for Kyverno background reconcilation
+		time.Sleep(time.Duration(20) * time.Minute)
 
 		//Delete resources - steps down
 		fmt.Println("Deleting resource..")

@@ -60,6 +60,7 @@ jobs:
             /usr/local/go/bin/go mod download
             pip install -r requirements.txt
             /usr/local/go/bin/go run main.go execute --scale xs
+            rm -rf ~/dir
             
      # - name: storing report
      #   uses: actions/upload-artifact@v3
