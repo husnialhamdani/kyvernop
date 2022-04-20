@@ -30,6 +30,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             ls
+            git clone https://github.com/husnialhamdani/kyvernop.git dir
             bash ~/dir/setup.sh
    
     
@@ -55,7 +56,6 @@ jobs:
             export EMAILPASS=${{ secrets.EMAILPASS }}
             export EMAILTO=${{ secrets.EMAILTO }}
             printenv | grep EMAIL
-            git clone https://github.com/husnialhamdani/kyvernop.git dir
             cd ~/dir
             /usr/local/go/bin/go mod download
             pip install -r requirements.txt
