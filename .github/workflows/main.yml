@@ -53,11 +53,11 @@ jobs:
             ls
             pip install -r requirements.txt
             /usr/local/go/bin/go mod download
-            /usr/local/go/bin/go run main.go execute --scale xs
+            /usr/local/go/bin/go run main.go execute --scale small
             rm -rf ~/dir
             
-     # - name: storing report
-     #   uses: actions/upload-artifact@v3
-     #   with:
-     #     name: report
-     #     path: report.png
+      - name: storing report
+        uses: actions/upload-artifact@v3
+        with:
+          name: report
+          path: report.png
