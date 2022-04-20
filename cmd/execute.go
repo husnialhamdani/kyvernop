@@ -42,7 +42,7 @@ var executeCmd = &cobra.Command{
 		}
 		clientset := kubernetes.NewForConfigOrDie(config)
 
-		scales, _ := cmd.Flags().GetString("scales")
+		scales, _ := cmd.Flags().GetString("scale")
 		quantityMap := map[string]int{"xs": 100, "small": 500, "medium": 1000, "large": 2000, "xl": 3000}
 		size := quantityMap[scales] / 5
 
@@ -86,7 +86,7 @@ var executeCmd = &cobra.Command{
 }
 
 func init() {
-	executeCmd.Flags().StringP("scales", "s", "xs", "choose the scale size (small/medium/large/xl) default: xs")
+	executeCmd.Flags().StringP("scale", "s", "xs", "choose the scale size (small/medium/large/xl) default: xs")
 	rootCmd.AddCommand(executeCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -188,7 +188,7 @@ func sendReport(from string, to string, subject string) {
 
 	d := gomail.NewDialer("smtp.gmail.com", 587, from, os.Getenv("EMAILPASS"))
 
-	// Send the email to Bob, Cora and Dan.
+	// Send the email
 	if err := d.DialAndSend(m); err != nil {
 		panic(err)
 	} else {
