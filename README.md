@@ -49,3 +49,9 @@ We pass the the Kyverno usage as input data and this algorithm will provide a pr
 After the automation has completed, the tools will automatically generate a report based on Kyverno performance behaviour during the test and using the algorithm mentioned above.
 
 ![alt text](https://github.com/husnialhamdani/kyvernop/blob/main/report.png?raw=true)
+
+## Kyverno Consideration on large cluster
+
+[Scales]  [Expected behaviour]
+
+### Recommendation setup
