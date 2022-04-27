@@ -54,4 +54,4 @@ After the automation has completed, the tools will automatically generate a repo
 
 [Scales]  [Expected behaviour]
 
-### Recommendation setup
+### Recommendations setup
