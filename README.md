@@ -14,6 +14,7 @@ Scales mapping:
   medium: 1000 total resource
   large: 2000 total resource 
   xl: 3000 total resource
+  xxl: 4000 total resource
 ```
 
 ## Getting Started
@@ -23,12 +24,28 @@ git clone https://github.com/husnialhamdani/kyvernop.git
 cd kyvernop
 go build .
 ```
-  
-Start automation
+
+### Setup Environment
+to create Kubernetes cluster with Kyverno base policies
+```
+bash setup.sh
+``` 
+
+to install additional policy you pass the url's to the script, for example:
+```
+bash setup.sh https://raw.githubusercontent.com/kyverno/policies/main/best-practices/require_probes/require_probes.yaml
+``` 
+
+
+### Start automation
+create resources based on pre-defined scales:
 ```
 ./kyvernop execute --scale medium
 ``` 
-
+create custom resources quantity based on user defined:
+```
+./kyvernop execute --number 5000
+``` 
 
 Cleanup
 ```
