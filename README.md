@@ -17,6 +17,22 @@ Scales mapping:
   xxl: 4000 total resource
 ```
 
+
+## Automation Phases
+
+  Phase 1: Collecting Kyverno usage started (it's run concurrently with the next phases)
+
+  Phase 2: Creating resources based on scales provided (steps up)
+
+  Phase 3: Idle process (to ensure the workloads has been successfully created and ready)
+
+  Phase 4: Deleting a half of resources (steps down)
+
+  Phase 5: Idle process (to get performance behaviour after steps up & down process)
+
+  Phase 6: Report Generated
+  
+
 ## Getting Started
 
 ```
