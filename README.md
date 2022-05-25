@@ -88,3 +88,8 @@ After the automation has completed, the tools will automatically generate a repo
 [Scales]  [Expected behaviour]
 
 ### Recommendations setup
+#### Kyverno Resource Limit config:
+
+Kyverno limit config:
+< 4000 total resource: use default limit
+> 4000 total resource: use 768Mi (2x the default)
