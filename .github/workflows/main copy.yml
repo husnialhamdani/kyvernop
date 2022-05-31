@@ -18,6 +18,11 @@ jobs:
     if:  ${{ github.event.inputs.create_cluster == 'true' }} 
     steps:
       - uses: actions/checkout@v3
+
+      - name: SCP action
+        uses: actions/checkout@v3
+      - run: |
+          scp
       
       - name: setup cluster
         uses: appleboy/ssh-action@master
