@@ -99,7 +99,7 @@ func CreatePod(clientset kubernetes.Clientset, name string, namespace string, im
 		},
 		Spec: corev1.PodSpec{
 			Containers: []corev1.Container{
-				{Name: "busybox", Image: "busybox:latest", Command: []string{"sleep", "100000"}},
+				{Name: "busybox", Image: "busybox:latest", ImagePullPolicy: "IfNotPresent", Command: []string{"sleep", "100000"}},
 			},
 		},
 	}
@@ -135,7 +135,7 @@ func CreateCronjob(clientset kubernetes.Clientset, name string, namespace string
 					Template: corev1.PodTemplateSpec{
 						Spec: corev1.PodSpec{
 							Containers: []corev1.Container{
-								{Name: "busybox", Image: "busybox", Command: []string{"sleep", "60"}},
+								{Name: "busybox", Image: "busybox", ImagePullPolicy: "IfNotPresent", Command: []string{"sleep", "60"}},
 							},
 							RestartPolicy: "OnFailure",
 						},
@@ -181,8 +181,9 @@ func CreateDeployment(clientset kubernetes.Clientset, name string, namespace str
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
 						{
-							Name:  "web",
-							Image: image,
+							Name:            "web",
+							Image:           image,
+							ImagePullPolicy: "IfNotPresent",
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "http",

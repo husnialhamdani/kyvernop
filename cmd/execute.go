@@ -27,13 +27,19 @@ import (
 	metrics "k8s.io/metrics/pkg/client/clientset/versioned"
 )
 
+var (
+	numberFlag int
+	size       int
+)
+
 // executeCmd represents the execute command
 var executeCmd = &cobra.Command{
 	Use:   "execute",
 	Short: "Run loads of resources creation",
-	Long:  `Run loadsd of resources creation`,
+	Long:  `Run loads of resources creation`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("execute called")
+		fmt.Println("--number:", numberFlag)
 		rules := clientcmd.NewDefaultClientConfigLoadingRules()
 		kubeconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(rules, &clientcmd.ConfigOverrides{})
 		config, err := kubeconfig.ClientConfig()
@@ -43,17 +49,24 @@ var executeCmd = &cobra.Command{
 		clientset := kubernetes.NewForConfigOrDie(config)
 
 		scales, _ := cmd.Flags().GetString("scale")
-		quantityMap := map[string]int{"xs": 100, "small": 500, "medium": 1000, "large": 2000, "xl": 3000}
+		number, _ := cmd.Flags().GetInt("number")
+		quantityMap := map[string]int{"xs": 100, "small": 500, "medium": 1000, "large": 2000, "xl": 3000, "xxl": 4000, "xxxl": 5000}
 
-		// kyvernop execute --scale xs
-		// kyvernop execute --number 600
+		// kyvernop execute --scale xs (done)
+		// kyvernop execute --number 600 (done)
+		fmt.Println("Value of scales", scales)
+		fmt.Println("Value of number", number)
 
-		size := quantityMap[scales] / 5
+		if number == 0 {
+			size = quantityMap[scales] / 5
+		} else {
+			size = number / 5
+		}
 
 		//Get usage
 		wg := new(sync.WaitGroup)
 		wg.Add(1)
-		go getMetrics(wg, *clientset, 8, 10, "kyverno")
+		go getMetrics(wg, *clientset, 20, 20, "kyverno", scales+":"+strconv.Itoa(quantityMap[scales])+"total resources")
 
 		//dependencies
 		label := map[string]string{"app": "web"}
@@ -62,7 +75,7 @@ var executeCmd = &cobra.Command{
 		for i := 0; i < size; i++ {
 			counter := strconv.Itoa(i)
 			objects.CreateNamespace(*clientset, counter)
-			objects.CreateCronjob(*clientset, counter, namespace, "* * * * *")
+			objects.CreateCronjob(*clientset, counter, namespace, "*/5 * * * *")
 			objects.CreateDeployment(*clientset, counter, namespace, "nginx:latest", label)
 			objects.CreateConfigmap(*clientset, counter, namespace)
 			objects.CreatePod(*clientset, counter, namespace, "nginx")
@@ -75,7 +88,7 @@ var executeCmd = &cobra.Command{
 			https://github.com/cenkalti/backoff
 
 		*/
-		time.Sleep(time.Duration(5) * time.Minute)
+		time.Sleep(time.Duration(3) * time.Minute)
 
 		//another wait for Kyverno background reconcilation
 		//time.Sleep(time.Duration(20) * time.Minute)
@@ -101,6 +114,7 @@ var executeCmd = &cobra.Command{
 
 func init() {
 	executeCmd.Flags().StringP("scale", "s", "xs", "choose the scale size (small/medium/large/xl) default: xs")
+	executeCmd.Flags().IntP("number", "n", 0, "number of quantity of resources that you want to create")
 	rootCmd.AddCommand(executeCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -114,13 +128,13 @@ func init() {
 	// executeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func getMetrics(wg *sync.WaitGroup, clientset kubernetes.Clientset, duration int, interval int, namespace string) {
+func getMetrics(wg *sync.WaitGroup, clientset kubernetes.Clientset, duration int, interval int, namespace string, scale string) {
 	defer wg.Done()
 	rules := clientcmd.NewDefaultClientConfigLoadingRules()
 	kubeconfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(rules, &clientcmd.ConfigOverrides{})
 	config, err := kubeconfig.ClientConfig()
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
 	mc, err := metrics.NewForConfig(config)
@@ -128,28 +142,60 @@ func getMetrics(wg *sync.WaitGroup, clientset kubernetes.Clientset, duration int
 		fmt.Println(err)
 	}
 
+	information := []string{scale}
 	var memoryUsage [][]int
+
+	kyvernoPod, err := clientset.CoreV1().Pods(namespace).List(context.TODO(), metav1.ListOptions{LabelSelector: "app.kubernetes.io/instance=kyverno"})
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// get kyverno pod name for report legend
+	for _, x := range kyvernoPod.Items {
+		information = append(information, x.GetName())
+	}
+
 	for len(memoryUsage) < (int(duration) * 60 / interval) {
 
-		kyvernoPod, err := clientset.CoreV1().Pods(namespace).List(context.TODO(), metav1.ListOptions{LabelSelector: "app.kubernetes.io/instance=kyverno"})
-		if err != nil {
-			fmt.Println(err)
-		}
-		name := kyvernoPod.Items[0].GetName()
-		podmetricGet, err := mc.MetricsV1beta1().PodMetricses(namespace).Get(context.Background(), name, metav1.GetOptions{})
+		//name := kyvernoPod.Items[0].GetName()
+		memoryUsage = append(memoryUsage, []int{len(memoryUsage)})
+		for _, x := range kyvernoPod.Items {
+			counter := len(memoryUsage) - 1
+			fmt.Println(x.GetName())
+			//append usage to memoryUsage array
+			podmetricGet, err := mc.MetricsV1beta1().PodMetricses(namespace).Get(context.Background(), x.GetName(), metav1.GetOptions{})
 
-		if err != nil {
-			fmt.Println(err)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			fmt.Println(memoryUsage)
+			if len(podmetricGet.Containers) == 0 {
+				memoryUsage[counter] = append(memoryUsage[counter], 0)
+				fmt.Println(memoryUsage)
+			} else {
+				memQuantity, ok := podmetricGet.Containers[0].Usage.Memory().AsInt64()
+				if !ok {
+					fmt.Println(!ok)
+				}
+				memoryUsage[counter] = append(memoryUsage[counter], int(memQuantity)/1000000)
+				fmt.Println(memoryUsage)
+			}
 		}
-		memQuantity, ok := podmetricGet.Containers[0].Usage.Memory().AsInt64()
-		if !ok {
-			fmt.Println(!ok)
-		}
-		memoryUsage = append(memoryUsage, []int{len(memoryUsage), int(memQuantity) / 1000000})
-		fmt.Println(memoryUsage)
 		time.Sleep(time.Duration(interval) * time.Second)
 	}
 
+	// information data
+	informationFile, err := os.Create("information.csv")
+	if err != nil {
+		log.Fatalf("failed creating file: %s", err)
+	}
+	informationwriter := csv.NewWriter(informationFile)
+	informationwriter.Write(information)
+	informationwriter.Flush()
+	informationFile.Close()
+
+	// usage data
 	csvfile, err := os.Create("usage.csv")
 	if err != nil {
 		log.Fatalf("failed creating file: %s", err)

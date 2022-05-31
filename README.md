@@ -94,3 +94,10 @@ Kyverno limit config:
 
 less than 4000 total resource: use default limit
 more than 4000 total resource: use 768Mi (2x the default)
+
+#if the workloads more than 2000
+- Memory limit
+- kyverno instance 
+
+#production cluster
+- kyverno HA mode (3 or 5 replicas for minimum)
