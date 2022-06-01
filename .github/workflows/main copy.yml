@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          port: ${{ secrets.PORT }}
+          port: 22
           script: |
             git clone https://github.com/husnialhamdani/kyvernop.git dir
             bash ~/dir/setup.sh
