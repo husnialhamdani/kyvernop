@@ -15,6 +15,7 @@ on:
         description: 'Choose the scale to test'
         required: true
         type: choice
+        default: xl
         options:
         - xs
         - small
@@ -22,7 +23,7 @@ on:
         - large
         - xl
         - xxl
-        - xxl
+        - xxxl
 jobs:
   automation:
     runs-on: ubuntu-latest
@@ -49,7 +50,8 @@ jobs:
             git clone https://github.com/husnialhamdani/kyvernop.git dir
             bash ~/dir/setup.sh
         continue-on-error: true
-
+        
+    steps:
       - name: run automation
         timeout-minutes: 40
         uses: appleboy/ssh-action@master
@@ -58,7 +60,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          port: ${{ secrets.PORT }}
+          port: 22
           script: |
             export EMAILFROM=${{ secrets.EMAILFROM }}
             export EMAILPASS=${{ secrets.EMAILPASS }}
@@ -79,3 +81,9 @@ jobs:
       #  with:
       #    name: report
       #    path: report.png
+
+      #- name: storing heap file
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: heap
+      #    path: heap.pprof
