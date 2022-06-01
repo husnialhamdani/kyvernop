@@ -25,23 +25,7 @@ on:
         - xxl
         - xxxl
 jobs:
-  fetch-code:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: setup cluster
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          port: ${{ secrets.PORT }}
-          script: |
-            git clone https://github.com/husnialhamdani/kyvernop.git dir
-        continue-on-error: true
-
-  setup-cluster:
+  automation:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     if:  ${{ github.event.inputs.create_cluster == 'true' }} 
@@ -63,13 +47,10 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           port: ${{ secrets.PORT }}
           script: |
+            git clone https://github.com/husnialhamdani/kyvernop.git dir
             bash ~/dir/setup.sh
         continue-on-error: true
-        
-  automation:
-    needs: fetch-code
-    runs-on: ubuntu-latest    
-    steps:
+
       - name: run automation
         timeout-minutes: 40
         uses: appleboy/ssh-action@master
