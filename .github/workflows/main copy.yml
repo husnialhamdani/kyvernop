@@ -67,6 +67,7 @@ jobs:
         continue-on-error: true
         
   automation:
+    needs: fetch-code
     runs-on: ubuntu-latest    
     steps:
       - name: run automation
