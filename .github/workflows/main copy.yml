@@ -22,7 +22,8 @@ jobs:
       - name: SCP action
         uses: actions/checkout@v3
       - run: |
-          scp
+          scp -i ${{ secrets.KEY }} ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/hello.txt .
+          ls
       
       - name: setup cluster
         uses: appleboy/ssh-action@master
