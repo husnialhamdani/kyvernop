@@ -15,7 +15,7 @@ on:
         description: 'Choose the scale to test'
         required: true
         type: choice
-        default: xl
+        default: small
         options:
         - xs
         - small
