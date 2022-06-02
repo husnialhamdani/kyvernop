@@ -47,6 +47,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           port: 22
           script: |
+            ls
             git clone https://github.com/husnialhamdani/kyvernop.git dir
             bash ~/dir/setup.sh
         continue-on-error: true
