@@ -27,7 +27,7 @@ on:
 jobs:
   automation:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 10
     if:  ${{ github.event.inputs.create_cluster == 'true' }} 
     steps:
       - uses: actions/checkout@v3
@@ -53,7 +53,7 @@ jobs:
         continue-on-error: true
 
       - name: run automation
-        timeout-minutes: 40
+        timeout-minutes: 70
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}

@@ -101,3 +101,5 @@ more than 4000 total resource: use 768Mi (2x the default)
 
 #production cluster
 - kyverno HA mode (3 or 5 replicas for minimum)
+
+* total resources : combination of static (ConfigMap & Secret) and workloads (Pod, Cronjob, Deployment)

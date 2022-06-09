@@ -66,7 +66,7 @@ var executeCmd = &cobra.Command{
 		//Get usage
 		wg := new(sync.WaitGroup)
 		wg.Add(1)
-		go getMetrics(wg, *clientset, 8, 20, "kyverno", scales+":"+strconv.Itoa(quantityMap[scales])+"total resources")
+		go getMetrics(wg, *clientset, 60, 20, "kyverno", scales+":"+strconv.Itoa(quantityMap[scales])+"total resources")
 
 		//dependencies
 		label := map[string]string{"app": "web"}
@@ -88,7 +88,8 @@ var executeCmd = &cobra.Command{
 			https://github.com/cenkalti/backoff
 
 		*/
-		time.Sleep(time.Duration(3) * time.Minute)
+		fmt.Println("sleep for 10 minutes")
+		time.Sleep(time.Duration(10) * time.Minute)
 
 		//another wait for Kyverno background reconcilation
 		//time.Sleep(time.Duration(20) * time.Minute)
